@@ -20,16 +20,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+def create_tables():
+    """Ensure database tables exist."""
+    with app.app_context():
+        db.create_all()
+
 sslify = SSLify(app)
 
 authority = AttributeAuthority()
 
 create_tables()
-
-def create_tables():
-    """Ensure database tables exist."""
-    with app.app_context():
-        db.create_all()
 
 @app.route('/')
 def index():
