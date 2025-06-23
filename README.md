@@ -13,7 +13,16 @@ Ce dépôt contient un projet minimal illustrant l'utilisation du chiffrement ba
 
 Installez d'abord les dépendances Python avec `pip install -r backend/requirements.txt`,
 générez ensuite le certificat SSL (`./certs/generate_cert.sh` sous Linux/Mac ou
-`bash certs/generate_cert.sh` sous Windows), puis lancez `python backend/app.py`
-et ouvrez `https://localhost:5000`.
+`bash certs/generate_cert.sh` sous Windows).
+
+Lancez ensuite l'application depuis la racine du projet :
+
+```bash
+python backend/app.py
+```
+
+Il est aussi possible de se placer dans le dossier `backend/` et d'exécuter
+directement `python app.py`.
+Ouvrez enfin `https://localhost:5000` dans votre navigateur.
 
 L'interface permet de créer des attributs, chiffrer des messages et les déchiffrer selon les droits d'accès.

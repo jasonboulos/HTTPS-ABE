@@ -3,9 +3,17 @@ from flask_sslify import SSLify
 from flask_sqlalchemy import SQLAlchemy
 from io import BytesIO
 import os
+import sys
+from pathlib import Path
 
-from .db import db, EncryptedData, AttributeKey, WrappedKey
-from .abe import AttributeAuthority, encrypt, decrypt
+if __package__ is None:
+    # Support running the app directly from the backend directory
+    sys.path.append(str(Path(__file__).resolve().parent.parent))
+    from db import db, EncryptedData, AttributeKey, WrappedKey
+    from abe import AttributeAuthority, encrypt, decrypt
+else:
+    from .db import db, EncryptedData, AttributeKey, WrappedKey
+    from .abe import AttributeAuthority, encrypt, decrypt
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -65,5 +73,7 @@ def decrypt_route(data_id):
     return send_file(BytesIO(plaintext), as_attachment=True, download_name='decrypted.txt')
 
 if __name__ == '__main__':
-    context = ('../certs/server.crt', '../certs/server.key')
-    app.run(ssl_context=context)
+    base_dir = Path(__file__).resolve().parent.parent
+    cert = base_dir / 'certs' / 'server.crt'
+    key = base_dir / 'certs' / 'server.key'
+    app.run(ssl_context=(str(cert), str(key)))
