@@ -24,9 +24,12 @@ sslify = SSLify(app)
 
 authority = AttributeAuthority()
 
-@app.before_first_request
+create_tables()
+
 def create_tables():
-    db.create_all()
+    """Ensure database tables exist."""
+    with app.app_context():
+        db.create_all()
 
 @app.route('/')
 def index():
@@ -73,6 +76,7 @@ def decrypt_route(data_id):
     return send_file(BytesIO(plaintext), as_attachment=True, download_name='decrypted.txt')
 
 if __name__ == '__main__':
+    create_tables()
     base_dir = Path(__file__).resolve().parent.parent
     cert = base_dir / 'certs' / 'server.crt'
     key = base_dir / 'certs' / 'server.key'
